@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohit Mandal | Web Architect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-blue: #00f2fe;
+            --neon-pink: #ff007f;
+            --sun-halo: #ffcc00;
+        }
+
+        * { box-sizing: border-box; }
+        body, html {
+            margin: 0; padding: 0;
+            background: #000;
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- BACKGROUND --- */
+        .universe-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #0a1128 0%, #000 80%);
+            z-index: -2;
+        }
+
+        /* --- 3D HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 2000px;
+            position: relative;
+        }
+
+        #stage {
+            transform-style: preserve-3d;
+            transition: 1s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .sun-sphere {
+            position: absolute;
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #fff 0%, var(--sun-halo) 40%, #ff4400 80%, #000 100%);
+            box-shadow: 0 0 80px var(--sun-halo), inset -10px -10px 30px rgba(0,0,0,0.8);
+            z-index: 5;
+        }
+
+        .orbit {
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            transform-style: preserve-3d;
+            animation: rotateOrbit linear infinite;
+        }
+
+        @keyframes rotateOrbit { 
+            from { transform: rotateX(75deg) rotateZ(0deg); } 
+            to { transform: rotateX(75deg) rotateZ(360deg); } 
+        }
+
+        .planet {
+            position: absolute;
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            pointer-events: auto;
+            transform-style: preserve-3d;
+            box-shadow: inset -12px -12px 25px rgba(0,0,0,0.9), inset 8px 8px 15px rgba(255,255,255,0.2), 0 0 20px rgba(0, 242, 254, 0.3);
+            transition: 0.4s;
+        }
+        .planet:hover { transform: scale(1.3); box-shadow: 0 0 40px var(--neon-blue); }
+
+        .p1 { background: radial-gradient(circle at 30% 30%, #4facfe, #00f2fe, #000); top: -30px; left: 50%; margin-left: -30px; }
+        .p2 { background: radial-gradient(circle at 30% 30%, #f093fb, #f5576c, #000); top: 50%; left: -30px; margin-top: -30px; }
+        .p3 { background: radial-gradient(circle at 30% 30%, #fff, #bdc3c7, #000); bottom: -30px; left: 50%; margin-left: -30px; }
+
+        .project-label {
+            position: absolute;
+            top: -45px; left: 50%;
+            transform: translateX(-50%) rotateX(-75deg);
+            font-family: 'Syncopate'; font-size: 0.7rem; color: #fff;
+            text-shadow: 0 0 8px var(--neon-blue);
+            white-space: nowrap; font-weight: 700;
+        }
+
+        #projectModal {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 350px;
+            background: rgba(0,0,0,0.9);
+            border: 1px solid var(--neon-blue);
+            padding: 30px;
+            border-radius: 15px;
+            z-index: 2000;
+            display: none;
+            backdrop-filter: blur(20px);
+            text-align: center;
+        }
+        #projectModal.active { display: block; animation: modalPop 0.4s forwards; }
+        @keyframes modalPop { to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+
+        .modal-btn {
+            margin-top: 20px;
+            background: var(--neon-blue);
+            color: #000; border: none;
+            padding: 10px 25px; font-family: 'Syncopate';
+            font-weight: 700; cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .modal-btn:hover { background: #fff; box-shadow: 0 0 15px var(--neon-blue); }
+
+        /* --- ABOUT SECTION --- */
+        .about-sec {
+            min-height: 100vh; display: flex; justify-content: center; align-items: center;
+            background: #000; padding: 50px;
+        }
+        .about-card {
+            max-width: 900px; display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px;
+            background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .about-card img { width: 100%; border-radius: 15px; border: 1px solid var(--neon-blue); }
+        .bio h2 { font-family: 'Syncopate'; color: var(--neon-blue); margin: 0; letter-spacing: 2px; }
+        .bio p { font-size: 1rem; color: #ccc; line-height: 1.6; }
+
+        /* --- GITHUB CARDS --- */
+        .github-container {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;
+        }
+        .gh-card {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--neon-blue);
+            padding: 12px; text-decoration: none; color: white;
+            transition: 0.3s; text-align: center; font-family: 'Syncopate'; font-size: 0.65rem;
+        }
+        .gh-card:hover { background: var(--neon-blue); color: #000; transform: translateY(-3px); }
+
+        .scroll-down {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center;
+            font-family: 'Syncopate'; font-size: 0.6rem; color: var(--neon-blue); letter-spacing: 3px;
+        }
+        .arrow {
+            width: 15px; height: 15px; border-right: 3px solid var(--neon-blue);
+            border-bottom: 3px solid var(--neon-blue); transform: rotate(45deg);
+            margin-top: 5px; animation: arrowBounce 1.5s infinite;
+        }
+        @keyframes arrowBounce { 0%, 100% { opacity: 0; transform: rotate(45deg) translate(-5px, -5px); } 50% { opacity: 1; transform: rotate(45deg) translate(0, 0); } }
+
+        @media (max-width: 768px) {
+            .about-card { grid-template-columns: 1fr; text-align: center; }
+            .hero { transform: scale(0.6); }
+            .github-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="universe-bg" id="stars"></div>
+
+    <div id="projectModal">
+        <h2 id="modalTitle" style="font-family: 'Syncopate'; color: var(--neon-blue);">PROJECT NAME</h2>
+        <p id="modalDesc" style="color: #ccc; font-size: 0.9rem; margin: 15px 0;">Description goes here...</p>
+        <button class="modal-btn" id="launchBtn">LAUNCH SITE</button>
+        <button class="modal-btn" onclick="closeModal()" style="background:none; color:white; border:1px solid white; margin-left:10px;">CLOSE</button>
+    </div>
+
+    <section class="hero">
+        <div id="stage">
+            <div class="sun-sphere"></div>
+
+            <div class="orbit" id="orbit1" style="width: 320px; height: 320px; animation-duration: 25s;">
+                <div class="planet p1" onclick="showDetails('PADHAI MATE', 'A futuristic educational ecosystem designed for focused learning.', 'https://mohitmandal66.github.io/padhai_mate/')">
+                    <div class="project-label">PADHAI MATE</div>
+                </div>
+            </div>
+
+            <div class="orbit" id="orbit2" style="width: 550px; height: 550px; animation-duration: 35s; animation-direction: reverse;">
+                <div class="planet p2" onclick="showDetails('SYMPTOMAX', 'Advanced health diagnostic interface for quick symptom analysis.', 'https://mohitmandal66.github.io/SYMPTOMAX/')">
+                    <div class="project-label" style="text-shadow: 0 0 8px var(--neon-pink);">SYMPTOMAX</div>
+                </div>
+            </div>
+
+            <div class="orbit" id="orbit3" style="width: 800px; height: 800px; animation-duration: 45s;">
+                <div class="planet p3" onclick="showDetails('CAFE OKTOBER', 'Cinematic digital menu system for high-end experiences.', 'https://my-website108.github.io/CAFE_OKTOBER/')">
+                    <div class="project-label" style="text-shadow: 0 0 8px #fff;">CAFE OKTOBER</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-down">
+            SCROLL TO ANALYZE
+            <div class="arrow"></div>
+            <div class="arrow" style="animation-delay: 0.2s;"></div>
+        </div>
+    </section>
+
+    <section class="about-sec">
+        <div class="about-card">
+            <div>
+                <img src="me.png" alt="Mohit" onerror="this.src='https://via.placeholder.com/300x400/000/00f2fe?text=MOHIT+MANDAL'">
+                <div style="margin-top: 15px; border: 1px solid var(--neon-pink); padding: 5px; text-align: center; color: var(--neon-pink); font-family: 'Syncopate'; font-size: 0.6rem;">
+                    DEVELOPER_AGE: 16_PLUS
+                </div>
+            </div>
+
+            <div class="bio">
+                <h2>MOHIT MANDAL</h2>
+                <h4 style="color: var(--neon-pink); font-family: 'Syncopate'; font-size: 0.7rem; margin: 10px 0;">CORE ARCHITECT • 8822357598</h4>
+                
+                <p style="border-left: 2px solid var(--neon-blue); padding-left: 15px;">
+                    I architect high-performance web ecosystems with a focus on clean logic. 
+                    Specializing in <b>HTML5</b>, <b>CSS3</b>, and <b>JavaScript</b>, I turn 
+                    complex code into immersive digital experiences. I don't just build websites; 
+                    I engineer digital art.
+                </p>
+                
+                <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 5px; font-family: monospace; font-size: 0.8rem; color: var(--neon-blue); border: 1px dashed rgba(0, 242, 254, 0.3); margin-top: 15px;">
+                    <div style="margin-bottom: 5px;">> INITIALIZING_SKILLS_REPORT...</div>
+                    <div style="margin-bottom: 5px;">[████████████████] 100% - HTML5_FLUENT</div>
+                    <div style="margin-bottom: 5px;">[████████████████] 100% - CSS3_EXPERT</div>
+                    <div style="margin-bottom: 5px;">[██████████████░] 95% - JS_SYSTEM_LOGIC</div>
+                </div>
+
+                <div style="margin-top: 25px;">
+                    <p style="font-family: 'Syncopate'; font-size: 0.6rem; color: #666; margin-bottom: 8px;">GLOBAL ARCHIVES (GITHUB)</p>
+                    <div class="github-container">
+                        <a href="https://github.com/mohitmandal66?tab=repositories" target="_blank" class="gh-card">ARCHIVE_01</a>
+                        <a href="https://github.com/MY-Website108/CAFE_OKTOBER.git" target="_blank" class="gh-card">ARCHIVE_02</a>
+                    </div>
+                </div>
+
+                <a href="https://wa.me/918822357598" target="_blank" class="modal-btn" style="width: 100%; text-align: center; margin-top: 20px; letter-spacing: 2px;">
+                    INITIALIZE PROJECT ORDER
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const modal = document.getElementById('projectModal');
+        const stage = document.getElementById('stage');
+        const orbits = document.querySelectorAll('.orbit');
+
+        function showDetails(title, desc, url) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDesc').innerText = desc;
+            document.getElementById('launchBtn').onclick = () => { warpTo(url); closeModal(); };
+            modal.classList.add('active');
+            orbits.forEach(o => o.style.animationPlayState = 'paused');
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            orbits.forEach(o => o.style.animationPlayState = 'running');
+        }
+
+        function warpTo(url) {
+            stage.style.transform = "scale(15) translateZ(1000px)";
+            stage.style.opacity = "0";
+            setTimeout(() => {
+                window.open(url, '_blank');
+                stage.style.transform = "scale(1)";
+                stage.style.opacity = "1";
+            }, 800);
+        }
+
+        // Stars Generation
+        for (let i = 0; i < 200; i++) {
+            const s = document.createElement('div');
+            s.style.position = 'absolute'; s.style.background = '#fff';
+            s.style.width = '1.5px'; s.style.height = '1.5px';
+            s.style.top = Math.random() * 100 + 'vh'; s.style.left = Math.random() * 100 + 'vw';
+            s.style.opacity = Math.random();
+            document.getElementById('stars').appendChild(s);
+        }
+    </script>
+</body>
+</html>
